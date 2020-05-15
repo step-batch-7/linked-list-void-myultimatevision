@@ -117,3 +117,31 @@ Element remove_from_start(List_ptr list)
   list->length--;
   return elementRemoved;
 }
+
+Element remove_from_end(List_ptr list)
+{
+  if (list->last == NULL)
+  {
+    return NULL;
+  }
+  Prev_Current_Pair *pair = malloc(sizeof(Prev_Current_Pair));
+  pair->prev = NULL;
+  pair->current = list->first;
+
+  while (pair->current != list->last)
+  {
+    pair->prev = pair->current;
+    pair->current = pair->current->next;
+  }
+  Node_ptr *ptr_to_set = &list->first;
+  if (pair->current != list->first)
+  {
+    ptr_to_set = &pair->prev->next;
+  }
+  *ptr_to_set = NULL;
+  Element element_removed = pair->current->element;
+  free(pair->current);
+  list->last = pair->prev;
+  list->length--;
+  return element_removed;
+}

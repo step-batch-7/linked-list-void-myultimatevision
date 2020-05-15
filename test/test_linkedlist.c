@@ -164,6 +164,43 @@ void test_remove_from_start()
   print_assert_status(status, "should remove element from start");
 }
 
+void test_remove_from_end()
+{
+  printf("remove_from_end\n");
+  List_ptr list = create_list();
+  Element *expected = malloc(sizeof(Element));
+
+  Element element_removed = remove_from_end(list);
+  Status are_elements_equal = element_removed == NULL;
+  Status are_list_values_equal = assert_values(list, expected, 0, is_int_equal);
+  Status status = are_elements_equal && are_list_values_equal && does_list_empty(list);
+  print_assert_status(status, "should return NULL when list is empty");
+
+  int number = 5;
+  add_to_start(list, &number);
+
+  int *expected_element = malloc(sizeof(int));
+  *expected_element = 5;
+  element_removed = remove_from_end(list);
+  are_elements_equal = is_int_equal(element_removed, expected_element);
+  are_list_values_equal = assert_values(list, expected, 0, is_int_equal);
+  status = are_elements_equal && are_list_values_equal && does_list_empty(list);
+  print_assert_status(status, "should remove from end and make list empty when list have one element");
+
+  int number1 = 8;
+  add_to_start(list, &number);
+  add_to_start(list, &number1);
+  int *expected1_element = malloc(sizeof(int));
+  *expected1_element = 5;
+  element_removed = remove_from_end(list);
+  Element *expected1 = malloc(sizeof(Element));
+  *expected1 = &number1;
+  are_elements_equal = is_int_equal(element_removed, expected1_element);
+  are_list_values_equal = assert_values(list, expected1, 1, is_int_equal);
+  status = are_elements_equal && are_list_values_equal;
+  print_assert_status(status, "should remove element from end");
+}
+
 int main(void)
 {
   test_add_to_list();
@@ -171,5 +208,6 @@ int main(void)
   test_insert_at();
   test_reverse();
   test_remove_from_start();
+  test_remove_from_end();
   return 0;
 }

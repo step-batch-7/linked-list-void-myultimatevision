@@ -9,7 +9,6 @@ The Linked List maintains the element references in a sequence and provides conv
 #ifndef __LINKEDLIST_H_
 #define __LINKEDLIST_H_
 
-
 typedef enum
 {
   Failure,
@@ -32,6 +31,12 @@ typedef struct linklist
   Node *last;
   int length;
 } LinkedList;
+
+typedef struct
+{
+  Node_ptr prev;
+  Node_ptr current;
+} Prev_Current_Pair;
 
 typedef LinkedList *List_ptr;
 

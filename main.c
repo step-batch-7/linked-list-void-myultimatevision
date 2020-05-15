@@ -15,5 +15,7 @@ int main()
   List_ptr list2 = reverse(list);
   Element element = remove_from_start(list2);
   printf("%d\n", *(int *)element);
+  element = remove_from_end(list2);
+  printf("%d\n", *(int *)element);
   return 0;
 }
