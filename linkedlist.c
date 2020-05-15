@@ -202,3 +202,13 @@ List_ptr remove_all_occurrences(List_ptr list, Element element, Matcher matcher)
   }
   return removed_elements_list;
 }
+
+Status add_unique(List_ptr list, Element element, Matcher matcher)
+{
+  Node_ptr p_walk = list->first;
+  while (p_walk != NULL && !matcher(p_walk->element, element))
+  {
+    p_walk = p_walk->next;
+  }
+  return p_walk == NULL ? add_to_list(list, element) : Failure;
+}

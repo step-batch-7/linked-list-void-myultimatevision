@@ -53,6 +53,7 @@ void test_add_to_start()
   status = isStatusEqual && areElementsEqual;
   print_assert_status(status, "should add at start of the list");
 }
+
 void test_insert_invalid_positions()
 {
   List_ptr list = create_list();
@@ -275,10 +276,10 @@ void test_remove_first_occurrence()
   List_ptr list = create_list();
   int numbers[4] = {4, 5, 6, 4};
 
-  Element element_removed = remove_first_occurrence(list, &numbers[1], is_int_equal);
+  Element element_removed = remove_first_occurrence(list, &numbers[1], &is_int_equal);
   Element *expected;
   Status are_elements_equal = element_removed == NULL;
-  Status are_list_values_equal = assert_values(list, expected, 0, is_int_equal);
+  Status are_list_values_equal = assert_values(list, expected, 0, &is_int_equal);
   Status status = are_elements_equal && are_list_values_equal;
   print_assert_status(status, "should return NULL when list is empty");
 
@@ -288,17 +289,17 @@ void test_remove_first_occurrence()
   add_to_start(list, &numbers[3]);
 
   int number = 10;
-  element_removed = remove_first_occurrence(list, &number, is_int_equal);
+  element_removed = remove_first_occurrence(list, &number, &is_int_equal);
   Element expected1[4] = {&numbers[3], &numbers[2], &numbers[1], &numbers[0]};
   are_elements_equal = element_removed == NULL;
-  are_list_values_equal = assert_values(list, expected1, 4, is_int_equal);
+  are_list_values_equal = assert_values(list, expected1, 4, &is_int_equal);
   status = are_elements_equal && are_list_values_equal;
   print_assert_status(status, "should not remove element in the list when given element is not present");
 
   Element expected2[3] = {&numbers[3], &numbers[1], &numbers[0]};
-  element_removed = remove_first_occurrence(list, &numbers[2], is_int_equal);
+  element_removed = remove_first_occurrence(list, &numbers[2], &is_int_equal);
   are_elements_equal = is_int_equal(element_removed, &numbers[2]);
-  are_list_values_equal = assert_values(list, expected2, 3, is_int_equal);
+  are_list_values_equal = assert_values(list, expected2, 3, &is_int_equal);
   status = are_elements_equal && are_list_values_equal;
   print_assert_status(status, "should remove first occurrence of given element");
 }
@@ -309,9 +310,9 @@ void test_remove_all_occurrences()
   List_ptr list = create_list();
   int numbers[4] = {4, 5, 6, 4};
 
-  List_ptr removed_elements_list = remove_all_occurrences(list, &numbers[1], is_int_equal);
+  List_ptr removed_elements_list = remove_all_occurrences(list, &numbers[1], &is_int_equal);
   Element *expected;
-  Status are_list_values_equal = assert_values(list, expected, 0, is_int_equal);
+  Status are_list_values_equal = assert_values(list, expected, 0, &is_int_equal);
   Status status = does_list_empty(removed_elements_list) && are_list_values_equal;
   print_assert_status(status, "should return NULL when list is empty");
 
@@ -321,17 +322,17 @@ void test_remove_all_occurrences()
   add_to_start(list, &numbers[3]);
 
   int number = 10;
-  removed_elements_list = remove_all_occurrences(list, &number, is_int_equal);
+  removed_elements_list = remove_all_occurrences(list, &number, &is_int_equal);
   Element expected1[4] = {&numbers[3], &numbers[2], &numbers[1], &numbers[0]};
-  are_list_values_equal = assert_values(list, expected1, 4, is_int_equal);
+  are_list_values_equal = assert_values(list, expected1, 4, &is_int_equal);
   status = does_list_empty(removed_elements_list) && are_list_values_equal;
   print_assert_status(status, "should not remove element in the list when given element is not present");
 
   Element expected2[3] = {&numbers[3], &numbers[1], &numbers[0]};
   Element removed_elements[1] = {&numbers[2]};
-  removed_elements_list = remove_all_occurrences(list, &numbers[2], is_int_equal);
-  Status are_elements_in_list_equal = assert_values(removed_elements_list, removed_elements, 1, is_int_equal);
-  are_list_values_equal = assert_values(list, expected2, 3, is_int_equal);
+  removed_elements_list = remove_all_occurrences(list, &numbers[2], &is_int_equal);
+  Status are_elements_in_list_equal = assert_values(removed_elements_list, removed_elements, 1, &is_int_equal);
+  are_list_values_equal = assert_values(list, expected2, 3, &is_int_equal);
   status = are_elements_in_list_equal && are_list_values_equal;
   print_assert_status(status, "should remove occurrence of given element when one matched element is present");
 
@@ -342,6 +343,32 @@ void test_remove_all_occurrences()
   are_list_values_equal = assert_values(list, expected3, 1, is_int_equal);
   status = are_elements_in_list_equal && are_list_values_equal;
   print_assert_status(status, "should remove all occurrences of given element");
+}
+
+void test_add_unique()
+{
+  printf("add_unique\n");
+  List_ptr list = create_list();
+  int number = 5;
+  int expected_array[1] = {5};
+  Element expected[1] = {&expected_array[0]};
+  Status isStatusEqual = assert_status(add_unique(list, &number, &is_int_equal), 1);
+  Status areElementsEqual = assert_values(list, expected, 1, &is_int_equal);
+  Status status = isStatusEqual && areElementsEqual;
+  print_assert_status(status, "should add to list when list is empty");
+
+  int expected_array1[2] = {5, 3};
+  int number2 = 3;
+  Element expected1[2] = {&expected_array1[0], &expected_array1[1]};
+  isStatusEqual = assert_status(add_unique(list, &number2, &is_int_equal), 1);
+  areElementsEqual = assert_values(list, expected1, 2, &is_int_equal);
+  status = isStatusEqual && areElementsEqual;
+  print_assert_status(status, "should add to end when element is not present in the list");
+
+  isStatusEqual = assert_status(add_unique(list, &number2, &is_int_equal), 0);
+  areElementsEqual = assert_values(list, expected1, 2, &is_int_equal);
+  status = isStatusEqual && areElementsEqual;
+  print_assert_status(status, "should not add element when element is already present in the list");
 }
 
 int main(void)
@@ -355,5 +382,6 @@ int main(void)
   test_remove_at();
   test_remove_first_occurrence();
   test_remove_all_occurrences();
+  test_add_unique();
   return 0;
 }
