@@ -190,3 +190,15 @@ Element remove_first_occurrence(List_ptr list, Element element, Matcher matcher)
   }
   return p_walk == NULL ? NULL : remove_at(list, position);
 }
+
+List_ptr remove_all_occurrences(List_ptr list, Element element, Matcher matcher)
+{
+  List_ptr removed_elements_list = create_list();
+  Element element_removed = remove_first_occurrence(list, element, matcher);
+  while (element_removed != NULL)
+  {
+    add_to_list(removed_elements_list, element);
+    element_removed = remove_first_occurrence(list, element, matcher);
+  }
+  return removed_elements_list;
+}

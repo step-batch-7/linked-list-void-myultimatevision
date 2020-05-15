@@ -303,6 +303,47 @@ void test_remove_first_occurrence()
   print_assert_status(status, "should remove first occurrence of given element");
 }
 
+void test_remove_all_occurrences()
+{
+  printf("remove_all_occurrences\n");
+  List_ptr list = create_list();
+  int numbers[4] = {4, 5, 6, 4};
+
+  List_ptr removed_elements_list = remove_all_occurrences(list, &numbers[1], is_int_equal);
+  Element *expected;
+  Status are_list_values_equal = assert_values(list, expected, 0, is_int_equal);
+  Status status = does_list_empty(removed_elements_list) && are_list_values_equal;
+  print_assert_status(status, "should return NULL when list is empty");
+
+  add_to_start(list, &numbers[0]);
+  add_to_start(list, &numbers[1]);
+  add_to_start(list, &numbers[2]);
+  add_to_start(list, &numbers[3]);
+
+  int number = 10;
+  removed_elements_list = remove_all_occurrences(list, &number, is_int_equal);
+  Element expected1[4] = {&numbers[3], &numbers[2], &numbers[1], &numbers[0]};
+  are_list_values_equal = assert_values(list, expected1, 4, is_int_equal);
+  status = does_list_empty(removed_elements_list) && are_list_values_equal;
+  print_assert_status(status, "should not remove element in the list when given element is not present");
+
+  Element expected2[3] = {&numbers[3], &numbers[1], &numbers[0]};
+  Element removed_elements[1] = {&numbers[2]};
+  removed_elements_list = remove_all_occurrences(list, &numbers[2], is_int_equal);
+  Status are_elements_in_list_equal = assert_values(removed_elements_list, removed_elements, 1, is_int_equal);
+  are_list_values_equal = assert_values(list, expected2, 3, is_int_equal);
+  status = are_elements_in_list_equal && are_list_values_equal;
+  print_assert_status(status, "should remove occurrence of given element when one matched element is present");
+
+  Element expected3[1] = {&numbers[1]};
+  Element removed_elements1[2] = {&numbers[0], &numbers[0]};
+  removed_elements_list = remove_all_occurrences(list, &numbers[0], is_int_equal);
+  are_elements_in_list_equal = assert_values(removed_elements_list, removed_elements1, 2, is_int_equal);
+  are_list_values_equal = assert_values(list, expected3, 1, is_int_equal);
+  status = are_elements_in_list_equal && are_list_values_equal;
+  print_assert_status(status, "should remove all occurrences of given element");
+}
+
 int main(void)
 {
   test_add_to_list();
@@ -313,5 +354,6 @@ int main(void)
   test_remove_from_end();
   test_remove_at();
   test_remove_first_occurrence();
+  test_remove_all_occurrences();
   return 0;
 }
