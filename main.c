@@ -17,5 +17,7 @@ int main()
   printf("%d\n", *(int *)element);
   element = remove_from_end(list2);
   printf("%d\n", *(int *)element);
+  element = remove_at(list, 1);
+  printf("%d\n", *(int *)element);
   return 0;
 }

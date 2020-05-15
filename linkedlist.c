@@ -145,3 +145,36 @@ Element remove_from_end(List_ptr list)
   list->length--;
   return element_removed;
 }
+
+Element remove_at(List_ptr list, int position)
+{
+  if (list->last == NULL || position < 0 || position >= list->length)
+  {
+    return NULL;
+  }
+  if (position == 0)
+  {
+    return remove_from_start(list);
+  }
+  if (position == list->length - 1)
+  {
+    return remove_from_end(list);
+  }
+
+  Prev_Current_Pair *pair = malloc(sizeof(Prev_Current_Pair));
+  pair->prev = NULL;
+  pair->current = list->first;
+  int count = 0;
+
+  while (count != position)
+  {
+    pair->prev = pair->current;
+    pair->current = pair->current->next;
+    count++;
+  }
+  Element element_removed = pair->current->element;
+  pair->prev->next = pair->current->next;
+  free(pair->current);
+  list->length--;
+  return element_removed;
+}

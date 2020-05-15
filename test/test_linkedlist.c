@@ -201,6 +201,74 @@ void test_remove_from_end()
   print_assert_status(status, "should remove element from end");
 }
 
+void remove_from_invalid_positions()
+{
+  List_ptr list = create_list();
+  Element *expected = malloc(sizeof(Element));
+
+  Element element_removed = remove_at(list, 1);
+  Status are_elements_equal = element_removed == NULL;
+  Status are_list_values_equal = assert_values(list, expected, 0, is_int_equal);
+  Status status = are_elements_equal && are_list_values_equal && does_list_empty(list);
+  print_assert_status(status, "should return NULL when list is empty");
+
+  int number = 5;
+  add_to_start(list, &number);
+  Element expected1[1] = {&number};
+  element_removed = remove_at(list, -1);
+  are_elements_equal = element_removed == NULL;
+  are_list_values_equal = assert_values(list, expected1, 1, is_int_equal);
+  status = are_elements_equal && are_list_values_equal;
+  print_assert_status(status, "should return NULL when position is less than zero");
+
+  int number1 = 8;
+  add_to_start(list, &number1);
+  Element expected2[2] = {&number1, &number};
+  element_removed = remove_at(list, 3);
+  are_elements_equal = element_removed == NULL;
+  are_list_values_equal = assert_values(list, expected2, 2, is_int_equal);
+  status = are_elements_equal && are_list_values_equal;
+  print_assert_status(status, "should return NULL when position is more than length");
+}
+
+void remove_from_valid_positions()
+{
+  List_ptr list = create_list();
+  int numbers[4] = {4, 5, 6, 8};
+  add_to_start(list, &numbers[0]);
+  add_to_start(list, &numbers[1]);
+  add_to_start(list, &numbers[2]);
+  add_to_start(list, &numbers[3]);
+
+  Element element_removed = remove_at(list, 0);
+  Element expected[3] = {&numbers[2], &numbers[1], &numbers[0]};
+  Status are_elements_equal = is_int_equal(element_removed, &numbers[3]);
+  Status are_list_values_equal = assert_values(list, expected, 3, is_int_equal);
+  Status status = are_elements_equal && are_list_values_equal;
+  print_assert_status(status, "should remove element at start when position is zero");
+
+  element_removed = remove_at(list, 1);
+  Element expected1[2] = {&numbers[2], &numbers[0]};
+  are_elements_equal = is_int_equal(element_removed, &numbers[1]);
+  are_list_values_equal = assert_values(list, expected1, 2, is_int_equal);
+  status = are_elements_equal && are_list_values_equal;
+  print_assert_status(status, "should remove element in the list when position is between zero and length");
+
+  Element expected2[1] = {&numbers[2]};
+  element_removed = remove_at(list, 1);
+  are_elements_equal = is_int_equal(element_removed, &numbers[0]);
+  are_list_values_equal = assert_values(list, expected2, 1, is_int_equal);
+  status = are_elements_equal && are_list_values_equal;
+  print_assert_status(status, "should remove element at start when position is equal to list length");
+}
+
+void test_remove_at()
+{
+  printf("remove_at\n");
+  remove_from_invalid_positions();
+  remove_from_valid_positions();
+}
+
 int main(void)
 {
   test_add_to_list();
@@ -209,5 +277,6 @@ int main(void)
   test_reverse();
   test_remove_from_start();
   test_remove_from_end();
+  test_remove_at();
   return 0;
 }
