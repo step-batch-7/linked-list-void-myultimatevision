@@ -48,10 +48,53 @@ void test_add_to_start()
   status = isStatusEqual && areElementsEqual;
   print_assert_status(status, "should add at start of the list");
 }
+void test_insert_invalid_positions()
+{
+  List_ptr list = create_list();
+  int number = 6;
+  Element *expected;
+
+  Status isStatusEqual = assert_status(insert_at(list, &number, -1), 0);
+  Status areElementsEqual = assert_values(list, expected, 0, &is_int_equal);
+  Status status = isStatusEqual && areElementsEqual;
+  print_assert_status(status, "should not add to list when position is less than zero");
+
+  isStatusEqual = assert_status(insert_at(list, &number, 1), 0);
+  areElementsEqual = assert_values(list, expected, 0, &is_int_equal);
+  status = isStatusEqual && areElementsEqual;
+  print_assert_status(status, "should not add to list when position is more than list length");
+}
+
+void test_insert_valid_positions()
+{
+  List_ptr list = create_list();
+  int number = 6;
+  int expected_array[1] = {6};
+  Element expected[1] = {&expected_array[0]};
+  Status isStatusEqual = assert_status(insert_at(list, &number, 0), 1);
+  Status areElementsEqual = assert_values(list, expected, 1, &is_int_equal);
+  Status status = isStatusEqual && areElementsEqual;
+  print_assert_status(status, "should add at start when list is empty and position is zero");
+
+  int expected_array1[2] = {6, 8};
+  int number2 = 8;
+  Element expected1[2] = {&expected_array1[0], &expected_array1[1]};
+  isStatusEqual = assert_status(insert_at(list, &number2, 1), 1);
+  areElementsEqual = assert_values(list, expected1, 2, &is_int_equal);
+  status = isStatusEqual && areElementsEqual;
+  print_assert_status(status, "should add at end of the list when position is equal to list length");
+}
+void test_insert_at()
+{
+  printf("insert at\n");
+  test_insert_invalid_positions();
+  test_insert_valid_positions();
+}
 
 int main(void)
 {
   test_add_to_list();
   test_add_to_start();
+  test_insert_at();
   return 0;
 }
