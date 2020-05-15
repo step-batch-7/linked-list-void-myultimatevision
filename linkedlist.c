@@ -212,3 +212,24 @@ Status add_unique(List_ptr list, Element element, Matcher matcher)
   }
   return p_walk == NULL ? add_to_list(list, element) : Failure;
 }
+
+Status clear_list(List_ptr list)
+{
+  if (list->first == NULL)
+  {
+    return Failure;
+  }
+  Prev_Current_Pair *pair = malloc(sizeof(Prev_Current_Pair));
+  pair->prev = NULL;
+  pair->current = list->first;
+  while (pair->current != NULL)
+  {
+    pair->prev = pair->current;
+    pair->current = pair->current->next;
+    free(pair->prev);
+  }
+  list->first = NULL;
+  list->last = NULL;
+  list->length = 0;
+  return Success;
+}

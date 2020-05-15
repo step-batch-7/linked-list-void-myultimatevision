@@ -360,6 +360,7 @@ void test_add_unique()
   int expected_array1[2] = {5, 3};
   int number2 = 3;
   Element expected1[2] = {&expected_array1[0], &expected_array1[1]};
+
   isStatusEqual = assert_status(add_unique(list, &number2, &is_int_equal), 1);
   areElementsEqual = assert_values(list, expected1, 2, &is_int_equal);
   status = isStatusEqual && areElementsEqual;
@@ -369,6 +370,21 @@ void test_add_unique()
   areElementsEqual = assert_values(list, expected1, 2, &is_int_equal);
   status = isStatusEqual && areElementsEqual;
   print_assert_status(status, "should not add element when element is already present in the list");
+}
+void test_clear_list()
+{
+  printf("clear_list\n");
+  List_ptr list = create_list();
+  Status isStatusEqual = assert_status(clear_list(list), Failure);
+  Status status = isStatusEqual && does_list_empty(list);
+  print_assert_status(status, "should return failure when list is empty");
+
+  int numbers[2] = {5, 4};
+  add_to_list(list, &numbers[0]);
+  add_to_list(list, &numbers[1]);
+  isStatusEqual = assert_status(clear_list(list), Success);
+  status = isStatusEqual && does_list_empty(list);
+  print_assert_status(status, "should clear the list and return Success");
 }
 
 int main(void)
@@ -383,5 +399,6 @@ int main(void)
   test_remove_first_occurrence();
   test_remove_all_occurrences();
   test_add_unique();
+  test_clear_list();
   return 0;
 }
