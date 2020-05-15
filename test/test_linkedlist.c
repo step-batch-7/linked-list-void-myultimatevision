@@ -12,6 +12,14 @@ Status does_list_empty(List_ptr list)
   return list->first == NULL && list->last == NULL && list->length == 0;
 }
 
+Element square(Element data)
+{
+  int number = *(int *)data;
+  int *square = malloc(sizeof(int));
+  *square = number * number;
+  return square;
+}
+
 void test_add_to_list()
 {
   printf("add_to_list\n");
@@ -387,6 +395,22 @@ void test_clear_list()
   print_assert_status(status, "should clear the list and return Success");
 }
 
+void test_map()
+{
+  printf("map\n");
+  List_ptr list = create_list();
+  print_assert_status(does_list_empty(map(list, &square)), "should give empty list when given list is empty");
+
+  int array[3] = {1, 2, 3};
+  add_to_list(list, &array[0]);
+  add_to_list(list, &array[1]);
+  add_to_list(list, &array[2]);
+  int expected_array[3] = {1, 4, 9};
+  Element expected[3] = {&expected_array[0], &expected_array[1], &expected_array[2]};
+  Status are_list_values_equal = assert_values(map(list, &square), expected, 3, is_int_equal);
+  print_assert_status(are_list_values_equal, "should give the squares of elements in the list");
+}
+
 int main(void)
 {
   test_add_to_list();
@@ -400,5 +424,6 @@ int main(void)
   test_remove_all_occurrences();
   test_add_unique();
   test_clear_list();
+  test_map();
   return 0;
 }

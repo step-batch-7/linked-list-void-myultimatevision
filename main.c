@@ -5,6 +5,14 @@ Status is_int_equal(Element element1, Element element2)
   return *(int *)element1 == *(int *)element2;
 }
 
+Element square(Element data)
+{
+  int number = *(int *)data;
+  int *square = malloc(sizeof(int));
+  *square = number * number;
+  return square;
+}
+
 int main()
 {
   List_ptr list = create_list();

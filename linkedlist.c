@@ -233,3 +233,15 @@ Status clear_list(List_ptr list)
   list->length = 0;
   return Success;
 }
+
+List_ptr map(List_ptr list, Mapper mapper)
+{
+  List_ptr mapped_list = create_list();
+  Node_ptr p_walk = list->first;
+  while (p_walk != NULL)
+  {
+    add_to_list(mapped_list, (*mapper)(p_walk->element));
+    p_walk = p_walk->next;
+  }
+  return mapped_list;
+}
