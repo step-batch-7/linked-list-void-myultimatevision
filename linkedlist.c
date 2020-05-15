@@ -275,3 +275,14 @@ Element reduce(List_ptr list, Element initial_value, Reducer reducer)
   }
   return initial_value;
 }
+
+void forEach(List_ptr list, ElementProcessor processor)
+{
+  List_ptr filtered_list = create_list();
+  Node_ptr p_walk = list->first;
+  while (p_walk != NULL)
+  {
+    (*processor)(p_walk->element);
+    p_walk = p_walk->next;
+  }
+}

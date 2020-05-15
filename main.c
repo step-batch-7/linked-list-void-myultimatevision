@@ -27,6 +27,11 @@ Element sum_of_numbers(Element initial, Element data)
   return sum;
 }
 
+void print_element(Element element)
+{
+  printf("%d\n", *(int *)element);
+}
+
 int main()
 {
   List_ptr list = create_list();
@@ -56,5 +61,6 @@ int main()
   List_ptr filtered_list = filter(list, &is_even);
   int initial = 0;
   Element sum = reduce(list, &initial, &sum_of_numbers);
+  forEach(list, print_element);
   return 0;
 }
