@@ -13,6 +13,12 @@ Element square(Element data)
   return square;
 }
 
+Status is_even(Element data)
+{
+  int number = *(int *)data;
+  return number % 2 == 0;
+}
+
 int main()
 {
   List_ptr list = create_list();

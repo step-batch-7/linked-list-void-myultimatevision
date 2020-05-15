@@ -20,6 +20,12 @@ Element square(Element data)
   return square;
 }
 
+Status is_even(Element data)
+{
+  int number = *(int *)data;
+  return number % 2 == 0;
+}
+
 void test_add_to_list()
 {
   printf("add_to_list\n");
@@ -411,6 +417,30 @@ void test_map()
   print_assert_status(are_list_values_equal, "should give the squares of elements in the list");
 }
 
+void test_filter()
+{
+  printf("filter\n");
+  int *empty_array;
+
+  List_ptr list = create_list();
+  print_assert_status(does_list_empty(filter(list, &is_even)), "should give empty list when given list is empty");
+
+  int array[3] = {1, 3, 7};
+  add_to_list(list, &array[0]);
+  add_to_list(list, &array[1]);
+  add_to_list(list, &array[2]);
+
+  print_assert_status(does_list_empty(filter(list, &is_even)), "should give the empty list when list has no even numbers");
+
+  int array2[3] = {2, 4, 5};
+  add_to_list(list, &array2[0]);
+  add_to_list(list, &array2[1]);
+  add_to_list(list, &array2[2]);
+  Element expected_array[2] = {&array2[0], &array2[1]};
+  Status status = assert_values(filter(list, &is_even), expected_array, 2, is_int_equal);
+  print_assert_status(status, "should filter the even numbers in the array");
+}
+
 int main(void)
 {
   test_add_to_list();
@@ -425,5 +455,6 @@ int main(void)
   test_add_unique();
   test_clear_list();
   test_map();
+  test_filter();
   return 0;
 }
