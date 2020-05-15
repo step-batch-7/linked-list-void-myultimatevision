@@ -12,5 +12,6 @@ int main()
   number = malloc(sizeof(int));
   *number = 2;
   insert_at(list, number, 2);
+  List_ptr list2 = reverse(list);
   return 0;
 }

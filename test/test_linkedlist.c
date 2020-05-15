@@ -91,10 +91,42 @@ void test_insert_at()
   test_insert_valid_positions();
 }
 
+void test_reverse()
+{
+  printf("reverse\n");
+  List_ptr list1 = create_list();
+  Element *expected;
+  List_ptr list2 = reverse(list1);
+  Status are_list1_values_equal = assert_values(list1, expected, 0, is_int_equal);
+  Status are_list2_values_equal = assert_values(list2, expected, 0, is_int_equal);
+  Status status = are_list1_values_equal & are_list2_values_equal;
+  print_assert_status(status, "should create empty list when given list is empty");
+
+  int number = 5;
+  add_to_start(list1, &number);
+  Element expected1[1] = {&number};
+  list2 = reverse(list1);
+  are_list1_values_equal = assert_values(list1, expected1, 1, is_int_equal);
+  are_list2_values_equal = assert_values(list2, expected1, 1, is_int_equal);
+  status = are_list1_values_equal & are_list2_values_equal;
+  print_assert_status(status, "should create list and return same list when list length is 1");
+
+  int number1 = 8;
+  add_to_start(list1, &number1);
+  Element list1_expected[2] = {&number1, &number};
+  Element list2_expected[2] = {&number, &number1};
+  list2 = reverse(list1);
+  are_list1_values_equal = assert_values(list1, list1_expected, 2, is_int_equal);
+  are_list2_values_equal = assert_values(list2, list2_expected, 2, is_int_equal);
+  status = are_list1_values_equal & are_list2_values_equal;
+  print_assert_status(status, "should create list and return reverse of given list");
+}
+
 int main(void)
 {
   test_add_to_list();
   test_add_to_start();
   test_insert_at();
+  test_reverse();
   return 0;
 }
