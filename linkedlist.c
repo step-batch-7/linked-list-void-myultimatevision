@@ -197,7 +197,7 @@ List_ptr remove_all_occurrences(List_ptr list, Element element, Matcher matcher)
   Element element_removed = remove_first_occurrence(list, element, matcher);
   while (element_removed != NULL)
   {
-    add_to_list(removed_elements_list, element);
+    add_to_list(removed_elements_list, element_removed);
     element_removed = remove_first_occurrence(list, element, matcher);
   }
   return removed_elements_list;
