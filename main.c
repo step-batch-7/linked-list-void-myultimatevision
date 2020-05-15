@@ -19,6 +19,14 @@ Status is_even(Element data)
   return number % 2 == 0;
 }
 
+Element sum_of_numbers(Element initial, Element data)
+{
+  int number = *(int *)data;
+  int *sum = malloc(sizeof(int));
+  *sum = *(int *)initial + number;
+  return sum;
+}
+
 int main()
 {
   List_ptr list = create_list();
@@ -43,5 +51,10 @@ int main()
 
   element = remove_first_occurrence(list, number, is_int_equal);
   printf("%d\n", *(int *)element);
+
+  List_ptr mapped_list = map(list, &square);
+  List_ptr filtered_list = filter(list, &is_even);
+  int initial = 0;
+  Element sum = reduce(list, &initial, &sum_of_numbers);
   return 0;
 }

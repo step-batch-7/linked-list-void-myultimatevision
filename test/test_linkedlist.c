@@ -26,6 +26,14 @@ Status is_even(Element data)
   return number % 2 == 0;
 }
 
+Element sum_of_numbers(Element initial, Element data)
+{
+  int number = *(int *)data;
+  int *sum = malloc(sizeof(int));
+  *sum = *(int *)initial + number;
+  return sum;
+}
+
 void test_add_to_list()
 {
   printf("add_to_list\n");
@@ -441,6 +449,30 @@ void test_filter()
   print_assert_status(status, "should filter the even numbers in the array");
 }
 
+void test_reduce()
+{
+  printf("reduce\n");
+
+  int *empty_array;
+
+  List_ptr list = create_list();
+  int initial_value = 0;
+  int expected_value = 0;
+
+  Status status = is_int_equal(reduce(list, &initial_value, &sum_of_numbers), &expected_value);
+  print_assert_status(status, "should give initial value when array is empty");
+
+  int array[4] = {1, 2, 3, 4};
+  add_to_list(list, &array[0]);
+  add_to_list(list, &array[1]);
+  add_to_list(list, &array[2]);
+  add_to_list(list, &array[3]);
+  initial_value = 0;
+  expected_value = 10;
+  status = is_int_equal(reduce(list, &initial_value, &sum_of_numbers), &expected_value);
+  print_assert_status(status, "should give the sum of elements of the array");
+}
+
 int main(void)
 {
   test_add_to_list();
@@ -456,5 +488,6 @@ int main(void)
   test_clear_list();
   test_map();
   test_filter();
+  test_reduce();
   return 0;
 }
