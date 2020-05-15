@@ -7,6 +7,11 @@ Status is_int_equal(Element element1, Element element2)
   return *(int *)element1 == *(int *)element2;
 }
 
+Status does_list_empty(List_ptr list)
+{
+  return list->first == NULL && list->last == NULL && list->length == 0;
+}
+
 void test_add_to_list()
 {
   printf("add_to_list\n");
@@ -122,11 +127,49 @@ void test_reverse()
   print_assert_status(status, "should create list and return reverse of given list");
 }
 
+void test_remove_from_start()
+{
+  printf("remove_from_start\n");
+  List_ptr list = create_list();
+  Element *expected = malloc(sizeof(Element));
+
+  Element element_removed = remove_from_start(list);
+  Status are_elements_equal = element_removed == NULL;
+  Status are_list_values_equal = assert_values(list, expected, 0, is_int_equal);
+  Status status = are_elements_equal && are_list_values_equal && does_list_empty(list);
+  print_assert_status(status, "should return NULL when list is empty");
+
+  int number = 5;
+  add_to_start(list, &number);
+
+  int *expected_element = malloc(sizeof(int));
+  *expected_element = 5;
+  element_removed = remove_from_start(list);
+  are_elements_equal = is_int_equal(element_removed, expected_element);
+  are_list_values_equal = assert_values(list, expected, 0, is_int_equal);
+  status = are_elements_equal && are_list_values_equal && does_list_empty(list);
+  print_assert_status(status, "should remove from start and make list empty when list have one element");
+
+  int number1 = 8;
+  add_to_start(list, &number);
+  add_to_start(list, &number1);
+  int *expected1_element = malloc(sizeof(int));
+  *expected1_element = 8;
+  element_removed = remove_from_start(list);
+  Element *expected1 = malloc(sizeof(Element));
+  *expected1 = &number;
+  are_elements_equal = is_int_equal(element_removed, expected1_element);
+  are_list_values_equal = assert_values(list, expected1, 1, is_int_equal);
+  status = are_elements_equal && are_list_values_equal;
+  print_assert_status(status, "should remove element from start");
+}
+
 int main(void)
 {
   test_add_to_list();
   test_add_to_start();
   test_insert_at();
   test_reverse();
+  test_remove_from_start();
   return 0;
 }

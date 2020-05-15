@@ -13,5 +13,7 @@ int main()
   *number = 2;
   insert_at(list, number, 2);
   List_ptr list2 = reverse(list);
+  Element element = remove_from_start(list2);
+  printf("%d\n", *(int *)element);
   return 0;
 }

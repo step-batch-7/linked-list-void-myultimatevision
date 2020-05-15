@@ -99,3 +99,21 @@ List_ptr reverse(List_ptr list)
   }
   return new_list;
 }
+
+Element remove_from_start(List_ptr list)
+{
+  if (list->first == NULL)
+  {
+    return NULL;
+  }
+  Node_ptr p_walk = list->first;
+  Element elementRemoved = p_walk->element;
+  list->first = p_walk->next;
+  if (p_walk == list->last)
+  {
+    list->last = NULL;
+  }
+  free(p_walk);
+  list->length--;
+  return elementRemoved;
+}
